@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <table class="table table-hover table-striped" id="system_table">
+        <thead>
+        <tr>
+            <th>Info</th>
+            <th class="img_style" >Image</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td>{{ context.employee['first_name'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>{{ context.employee['last_name'] }}</td>
+                    </tr>
+                    <tr><td>Desk Phone: {{ context.employee['desk_phone'] }}</td></tr>
+                    <tr><td>Mobile Phone: {{ context.employee['mobile_phone'] }}</td></tr>
+                    <tr><td>Email: {{ context.employee['email'] }}</td></tr>
+                    <tr><td>Title: {{ context.employee['title'] }}</td></tr>
+                    <tr><td>Employee ID: {{ context.employee['empid'] }}</td></tr>
+                    <tr><td>Location: {{ context.employee['location'] }}</td></tr>
+
+                    </tbody>
+                </table>
+            </td>
+            <td class="img_style">
+                <img src="https://via.placeholder.com/200"/>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+                    <a href="/edit/{{ context.employee['id'] }}">
+                    <img src="{{ url_for('static', filename='/icons/pencil-square.svg')}}" alt="edit"/>
+                </a>
+
+{% endblock %}
+
+
+
