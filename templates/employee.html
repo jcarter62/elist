@@ -7,7 +7,7 @@
         <thead>
         <tr>
             <th>Info</th>
-            <th class="img_style" >Image</th>
+            <th class="img_style">Image</th>
         </tr>
         </thead>
         <tbody>
@@ -21,26 +21,41 @@
                     <tr>
                         <td>{{ context.employee['last_name'] }}</td>
                     </tr>
-                    <tr><td>Desk Phone: {{ context.employee['desk_phone'] }}</td></tr>
-                    <tr><td>Mobile Phone: {{ context.employee['mobile_phone'] }}</td></tr>
-                    <tr><td>Email: {{ context.employee['email'] }}</td></tr>
-                    <tr><td>Title: {{ context.employee['title'] }}</td></tr>
-                    <tr><td>Employee ID: {{ context.employee['empid'] }}</td></tr>
-                    <tr><td>Location: {{ context.employee['location'] }}</td></tr>
+                    <tr>
+                        <td>Desk Phone: {{ context.employee['desk_phone'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Mobile Phone: {{ context.employee['mobile_phone'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Email: {{ context.employee['email'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Title: {{ context.employee['title'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Employee ID: {{ context.employee['empid'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Location: {{ context.employee['location'] }}</td>
+                    </tr>
 
                     </tbody>
                 </table>
             </td>
-            <td class="img_style">
-                <img src="https://via.placeholder.com/200"/>
+            <td>
+                <img class="w-100" src="{{ context.imageurl }}"/>
             </td>
 
         </tr>
         </tbody>
     </table>
-                    <a href="/edit/{{ context.employee['id'] }}">
-                    <img src="{{ url_for('static', filename='/icons/pencil-square.svg')}}" alt="edit"/>
-                </a>
+    <a href="/edit/{{ context.employee['id'] }}">
+        <img src="{{ url_for('static', filename='/icons/pencil-square.svg') }}" alt="edit"/>
+    </a>
+    <a href="/upload/{{ context.employee['empid'] }}">
+        <img src="{{ url_for('static', filename='/icons/cloud-arrow-up.svg') }}" alt="upload image"/>
+    </a>
 
 {% endblock %}
 

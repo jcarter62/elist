@@ -27,4 +27,5 @@ input[type=submit] { align-self: start; min-width: 10em; }
 .white_bkg { fill: white }
 .showrow { }
 .hiderow { display: none }
-.img_style { width: 30% }
+.img_style { width: 100%; max-width: 50%; }
+.w-10 { width: 10%!important;}
