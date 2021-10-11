@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request
+from flask import Flask, render_template, redirect, request, url_for
 from flask_bootstrap import Bootstrap
 from db import DB
 
@@ -24,9 +24,12 @@ def route_home():
 def route_employee(id):
     db = DB()
     employee = db.load_employee(id)
+
+    imageurl = url_for('static', filename='pictures' + str(employee['empid']) )
     context = {
         'employee': employee,
-        'title': 'Display Employee'
+        'title': 'Display Employee',
+        'imageurl': imageurl
     }
     return render_template('employee.html', context=context)
 
