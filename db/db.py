@@ -208,3 +208,39 @@ class DB:
         newid = self._get_next_id()
         self.insert_employee(id=newid, first_name='', last_name='')
         return newid
+
+    def load_from_array(self, data):
+        max_id = 0
+
+        # Truncate table
+        try:
+            c = self._conn.cursor()
+            cmd = 'delete from employees;'
+            c.execute(cmd)
+            self._commit()
+        except Error as e:
+            print(e)
+
+        # get max id
+        try:
+            cmd = 'select max(id) as num from systems;'
+            c = self._conn.cursor()
+            c = c.execute(cmd)
+            row = c.fetchone()
+
+            max_id = row[0]
+            if max_id is None:
+                max_id = 0
+        except Error as e:
+            print(e)
+
+        # Iterate data
+        new_id = max_id
+        for row in data:
+            new_id = new_id + 1
+            self.insert_employee(id=new_id, first_name=row['first_name'], last_name=row['last_name'],
+                                 desk_phone=row['desk_phone'], mobile_phone=row['mobile_phone'],
+                                 email=row['email'], title=row['title'], empid=row['empid'], location=row['location'],
+                                 start_date=row['start_date'], end_date=row['end_date'])
+
+        return

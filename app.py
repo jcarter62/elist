@@ -7,10 +7,16 @@ import os
 app = Flask(__name__)
 Bootstrap(app)
 
+# Upload folder
+UPLOAD_FOLDER = 'static/files'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
 @app.before_request
 def load_config():
     app.config.from_object('config')
     return
+
 
 @app.route('/')
 def route_home():
@@ -21,6 +27,7 @@ def route_home():
         'title': 'Employees - Home'
     }
     return render_template('home.html', context=context)
+
 
 @app.route('/employee/<id>')
 def route_employee(id):
@@ -54,6 +61,7 @@ def route_edit_id(id):
         'title': 'Add Employee'
     }
     return render_template('editemployee.html', context=context)
+
 
 @app.route('/save', methods=['POST'])
 def route_save_post():
@@ -99,6 +107,7 @@ def route_upload_id(id):
     }
     return render_template('upload_image.html', context=context)
 
+
 @app.route('/upload-post', methods=['post'])
 def route_upload_post():
     id = request.form['empid']
@@ -121,11 +130,13 @@ def route_maintenance():
     }
     return render_template('maintenance.html', context=context)
 
+
 @app.route('/export')
 def route_export():
     from csvio import csvExport
     filename = csvExport().execute()
     return send_file(filename)
+
 
 @app.route('/import-employees')
 def route_import_employees():
@@ -135,9 +146,21 @@ def route_import_employees():
     }
     return render_template('importcsv.html', context=context)
 
+
 @app.route('/import-employees', methods=['post'])
 def route_import_employees_post():
+    from csvio import csvImport
+    file_path = ''
 
+    uploaded_file = request.files['file']
+    if uploaded_file.filename != '':
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename)
+        uploaded_file.save(file_path)
+
+    imp = csvImport()
+    data = imp.parseCSV(file_path)
+    db = DB()
+    db.load_from_array(data)
 
     return redirect('/')
 
