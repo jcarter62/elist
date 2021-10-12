@@ -1,10 +1,12 @@
-from flask import Flask, render_template, redirect, request, url_for, send_file
+from flask import Flask, render_template, redirect, request, url_for, send_file, session, current_app
 from flask_bootstrap import Bootstrap
 from db import DB
 from emp_picture import EmployeePicture
 import os
 
 app = Flask(__name__)
+app.config.from_object('config')
+app.secret_key = app.config['SECRET_KEY']
 Bootstrap(app)
 
 # Upload folder
@@ -29,10 +31,10 @@ def route_home():
     return render_template('home.html', context=context)
 
 
-@app.route('/employee/<id>')
-def route_employee(id):
+@app.route('/employee/<empid>')
+def route_employee(empid):
     db = DB()
-    employee = db.load_employee(id)
+    employee = db.load_employee(empid)
     imageurl = '/image/' + employee['empid']
 
     # imageurl = url_for('static', filename='pictures' + str(employee['empid']) + '.jpg' )
@@ -49,13 +51,15 @@ def route_employee(id):
 def route_image_id_name(id):
     empPict = EmployeePicture(id)
     imageurl = empPict.getimagepath()
+    if imageurl <= '':
+        imageurl =  os.path.join(empPict._current_app.root_path,'static','thumbnailgenerator.jpg')
     return send_file(imageurl)
 
 
-@app.route('/edit/<id>')
-def route_edit_id(id):
+@app.route('/edit/<empid>')
+def route_edit_id(empid):
     db = DB()
-    employee = db.load_employee(id)
+    employee = db.load_employee(empid)
     context = {
         'employee': employee,
         'title': 'Add Employee'
@@ -76,9 +80,11 @@ def route_save_post():
     emp['title'] = request.form['i_title']
     emp['empid'] = request.form['i_empid']
     emp['location'] = request.form['i_location']
+    emp['start_date'] = request.form['i_start_date']
+    emp['end_date'] = request.form['i_end_date']
     db.update_employee(emp)
 
-    url = '/edit/' + str(id)
+    url = '/employee/' + str(id)
     return redirect(url)
 
 
@@ -163,6 +169,28 @@ def route_import_employees_post():
     db.load_from_array(data)
 
     return redirect('/')
+
+
+@app.route('/delete', methods=['POST'])
+def route_delete_empid_post():
+    empid = request.form['empid']
+    db = DB()
+    db.delete_employee(empid)
+    return redirect('/')
+
+
+@app.route('/delete/<empid>')
+def route_delete_empid_get(empid):
+    db = DB()
+    employee = db.load_employee(empid)
+    if employee is None:
+        return redirect('/')
+
+    context = {
+        "title": "Delete Record",
+        "employee": employee
+    }
+    return render_template('del-employee.html', context=context)
 
 
 if __name__ == '__main__':

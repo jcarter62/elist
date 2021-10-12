@@ -52,6 +52,14 @@
                         <td>Location</td>
                         <td><input type="text" name="i_location" value="{{ context.employee['location'] }}"/></td>
                     </tr>
+                    <tr>
+                        <td>Start Date</td>
+                        <td><input type="date" name="i_start_date" value="{{ context.employee['start_date'] }}"/></td>
+                    </tr>
+                    <tr>
+                        <td>End Date</td>
+                        <td><input type="date" name="i_end_date" value="{{ context.employee['end_date'] }}"/></td>
+                    </tr>
                     </tbody>
                 </table>
             </td>
@@ -62,7 +70,7 @@
         </tbody>
     </table>
     <span>
-    <button type="reset">Cancel</button>
+    <button type="reset" onclick="window.location='/';" >Cancel</button>
     <button type="submit">Save</button>
     </span>
     </form>

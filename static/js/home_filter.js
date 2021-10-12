@@ -10,7 +10,7 @@ function applyfilter() {
     let hide_class = 'hiderow';
     let show_class = 'showrow';
     // if filter string is empty, then show all rows
-    let table = document.getElementById("system_table");
+    let table = document.getElementById("data_table");
     let row_elem;
     for (let i = 0, row; row = table.rows[i]; i++) {
         let showrow = false;
@@ -32,4 +32,26 @@ function applyfilter() {
             }
         }
     }
+    save_search_string(e.value);
 }
+
+function save_search_string(srch_string) {
+    sessionStorage.setItem('searchvalue', srch_string);
+}
+
+function get_search_string() {
+    return sessionStorage.getItem('searchvalue');
+}
+
+window.onload = (event) => {
+    // ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event
+    let search_string = get_search_string();
+    let e = document.getElementById('filtervalue');
+    e.value = search_string;
+    if (search_string.length > 0) {
+        applyfilter();
+    }
+    return;
+}
+
+

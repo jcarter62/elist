@@ -156,14 +156,14 @@ class DB:
             print(e)
         return data
 
-    def load_employee(self, id) -> []:
+    def load_employee(self, empid) -> []:
         data = {}
         try:
             cmd = 'select id, first_name, last_name, desk_phone, mobile_phone, ' +\
                 'email, title, empid, location, start_date, end_date, image from employees ' +\
-                'where id = ?;'
+                'where empid = ? ;'
             c = self._conn.cursor()
-            c = c.execute(cmd, (id))
+            c = c.execute(cmd, [empid])
             rows = c.fetchall()
 
             for row in rows:
@@ -244,3 +244,14 @@ class DB:
                                  start_date=row['start_date'], end_date=row['end_date'])
 
         return
+
+    def delete_employee(self, empid) -> []:
+        try:
+            cmd = 'delete from employees where empid = ? ;'
+            c = self._conn.cursor()
+            c.execute(cmd, [empid])
+            self._commit()
+        except Error as e:
+            print(e)
+        return
+

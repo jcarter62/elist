@@ -49,6 +49,12 @@
 
                     </tbody>
                 </table>
+                <form action="/delete" method="post">
+                    <input type="hidden" name="empid" value="{{ context.employee['empid'] }}"/>
+                    <button type="submit" class="bg-danger" >Confirm - Delete Record</button>
+                    <button type="reset" class="bg-info" onclick="window.location='/'">Cancel</button>
+                </form>
+
             </td>
             <td>
                 <img class="w-100" src="{{ context.imageurl }}"/>
@@ -57,13 +63,6 @@
         </tr>
         </tbody>
     </table>
-    <a href="/edit/{{ context.employee['empid'] }}">
-        <img src="{{ url_for('static', filename='/icons/pencil-square.svg') }}" alt="edit"/>
-    </a>
-    <a href="/upload/{{ context.employee['empid'] }}">
-        <img src="{{ url_for('static', filename='/icons/cloud-arrow-up.svg') }}" alt="upload image"/>
-    </a>
-
 {% endblock %}
 
 

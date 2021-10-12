@@ -3,22 +3,22 @@
 {% endblock %}
 
 {% block content %}
-    <table class="table table-hover table-striped" id="system_table">
+    <table class="table table-hover table-striped" id="data_table">
     <thead>
     <tr>
-        <th>name</th>
-        <th>img</th>
-        <th>phone</th>
-        <th>title</th>
-        <th>id</th>
-        <th>location</th>
-        <th>action</th>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Phone</th>
+        <th>Title</th>
+        <th>ID</th>
+        <th>Location</th>
+        <th>Action</th>
     </tr>
     </thead>
         <tbody>
         {% for s in context.employees %}
         <tr id="row{{ s["id"] }}">
-            <th scope="row"><a href="/employee/{{ s['id'] }}">{{ s["name"] }}</a></th>
+            <th scope="row"><a href="/employee/{{ s['empid'] }}">{{ s["name"] }}</a></th>
 {#            https://codepen.io/cristinaconacel/pen/OBKBPK#}
             <td class="w-10"><img src="/image/{{ s['empid'] }}" class="img-fluid img-thumbnail"></td>
             <td>{{ s["desk_phone"] }} <img src="{{ url_for('static', filename='/icons/telephone.svg')}}" alt="desk phone"/><br>
@@ -27,10 +27,10 @@
             <td>{{ s["empid"] }}</td>
             <td>{{ s["location"] }}</td>
             <td>
-                <a href="/edit/{{ s["id"] }}">
+                <a href="/edit/{{ s["empid"] }}">
                     <img src="{{ url_for('static', filename='/icons/pencil-square.svg')}}" alt="edit"/>
                 </a>
-                <a href="/delete/{{ s["id"] }}">
+                <a href="/delete/{{ s["empid"] }}">
                     <img src="{{ url_for('static', filename='/icons/trash.svg')}}" alt="delete"/>
                 </a>
             </td>

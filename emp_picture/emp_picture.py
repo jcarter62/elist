@@ -36,7 +36,8 @@ class EmployeePicture:
     def _count_images(self):
         image_count = 0
         for f in listdir(self._employee_path):
-            if f.endswith('.jpg') or f.endswith('.png'):
+            flc = f.lower()
+            if flc.endswith('.jpg') or flc.endswith('.png'):
                 image_count += 1
                 self._image_path = os.path.join(self._employee_path, f)
         return image_count
@@ -48,5 +49,6 @@ class EmployeePicture:
         return self._employee_path
 
     def _determine_default_image(self):
+        # Identify the most recent file
         pass
 

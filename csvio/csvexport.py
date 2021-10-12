@@ -9,6 +9,9 @@ class csvExport:
 
     def __init__(self):
         self._temp_folder = tempfile.TemporaryDirectory()
+        foldername = self._temp_folder.name
+        if not os.path.exists(foldername):
+            os.path.mkdir(foldername)
         return
 
     def __del__(self):
