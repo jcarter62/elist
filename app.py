@@ -31,6 +31,23 @@ def route_home():
     return render_template('home.html', context=context)
 
 
+@app.route('/login')
+def route_login():
+    context = {
+        "title": "Login"
+    }
+    return render_template('login.html', context=context)
+
+
+@app.route('/login', methods=['POST'])
+def route_login_post():
+
+    context = {
+        "title": "Login - post"
+    }
+    return render_template('login.html', context=context)
+
+
 @app.route('/employee/<empid>')
 def route_employee(empid):
     db = DB()
