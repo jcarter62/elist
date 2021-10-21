@@ -1,6 +1,7 @@
 import sqlite3
 from flask import current_app
 from sqlite3 import Error
+import arrow
 
 
 class DB:
@@ -110,10 +111,33 @@ class DB:
             print(e)
         return
 
+    def _years_of_service(self, start_date, end_date):
+
+        result = 0.0
+        if start_date is None or start_date <= '':
+            # can't calculate.
+            pass
+        else:
+            if end_date is None or end_date <= '':
+                end_date = arrow.now()
+            else:
+                end_date = arrow.get(end_date)
+
+            start_date = arrow.get(start_date, 'MM/DD/YYYY')
+
+            try:
+                diff_date = end_date - start_date
+                result = diff_date.days / 365.25
+            except:
+                result = 0.0
+
+        result = '{:.2f}'.format(result)
+        return result
+
     def insert_employee(self, id, first_name='', last_name='', desk_phone='', mobile_phone='', email='', title='',
                         empid='', location='', start_date='', end_date='', image=''):
         try:
-            cmd = 'insert into employees ' +\
+            cmd = 'insert into employees ' + \
                   '(id, first_name, last_name, desk_phone, mobile_phone, email, title, empid, location, start_date, end_date, image) ' + \
                   'values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
             c = self._conn.cursor()
@@ -128,13 +152,14 @@ class DB:
     def load_employees(self) -> []:
         data = []
         try:
-            cmd = 'select id, first_name, last_name, desk_phone, mobile_phone, ' +\
-                'email, title, empid, location, start_date, end_date, image from employees;'
+            cmd = 'select id, first_name, last_name, desk_phone, mobile_phone, ' + \
+                  'email, title, empid, location, start_date, end_date, image from employees;'
             c = self._conn.cursor()
             c = c.execute(cmd)
             rows = c.fetchall()
 
             for row in rows:
+                yofs = self._years_of_service(row[9], row[10])
                 one = {
                     "id": row[0],
                     "first_name": row[1],
@@ -149,6 +174,7 @@ class DB:
                     "start_date": row[9],
                     "end_date": row[10],
                     "image": row[11],
+                    "yofs": yofs
                 }
                 data.append(one)
 
@@ -159,14 +185,15 @@ class DB:
     def load_employee(self, empid) -> []:
         data = {}
         try:
-            cmd = 'select id, first_name, last_name, desk_phone, mobile_phone, ' +\
-                'email, title, empid, location, start_date, end_date, image from employees ' +\
-                'where empid = ? ;'
+            cmd = 'select id, first_name, last_name, desk_phone, mobile_phone, ' + \
+                  'email, title, empid, location, start_date, end_date, image from employees ' + \
+                  'where empid = ? ;'
             c = self._conn.cursor()
             c = c.execute(cmd, [empid])
             rows = c.fetchall()
 
             for row in rows:
+                yofs = self._years_of_service(row[9], row[10])
                 data = {
                     "id": row[0],
                     "first_name": row[1],
@@ -181,6 +208,7 @@ class DB:
                     "start_date": row[9],
                     "end_date": row[10],
                     "image": row[11],
+                    "yofs": yofs
                 }
 
         except Error as e:
@@ -189,20 +217,19 @@ class DB:
 
     def update_employee(self, data):
         try:
-            cmd = 'update employees set first_name = ?, last_name = ?, desk_phone = ?, mobile_phone = ?, ' +\
-                'email = ?, title = ?, empid = ?, location = ?, start_date = ?, end_date = ?, image = ? ' +\
-                'where id = ?;'
+            cmd = 'update employees set first_name = ?, last_name = ?, desk_phone = ?, mobile_phone = ?, ' + \
+                  'email = ?, title = ?, empid = ?, location = ?, start_date = ?, end_date = ?, image = ? ' + \
+                  'where id = ?;'
             c = self._conn.cursor()
-            params = ( data['first_name'], data['last_name'], data['desk_phone'], data['mobile_phone'],
-                       data['email'], data['title'], data['empid'], data['location'], data['start_date'],
-                       data['end_date'], data['image'], data['id'])
+            params = (data['first_name'], data['last_name'], data['desk_phone'], data['mobile_phone'],
+                      data['email'], data['title'], data['empid'], data['location'], data['start_date'],
+                      data['end_date'], data['image'], data['id'])
             c = c.execute(cmd, params)
             self._commit()
 
         except Error as e:
             print(e)
         return
-
 
     def create_new_employee(self) -> int:
         newid = self._get_next_id()
@@ -254,4 +281,3 @@ class DB:
         except Error as e:
             print(e)
         return
-

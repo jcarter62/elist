@@ -3,45 +3,58 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='people.ico') }}" >
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='people.ico') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
     <title>{{ context.title }}</title>
 </head>
 <body>
 <main>
     <nav class="navbar navbar-dark bg-secondary" aria-label="First navbar example">
-    <div class="container-fluid">
+        <div class="container-fluid">
         <span>
-            <a class="navbar-brand" href="/"><img src="{{ url_for('static', filename='/icons/house-fill.svg')}}" alt="Home"></a>
-            <input type="text" id="filtervalue" onkeyup="applyfilter()" placeholder="Search String" value="" >
+            <a class="navbar-brand" href="/"><img src="{{ url_for('static', filename='/icons/house-fill.svg') }}"
+                                                  alt="Home"></a>
+            <input type="text" id="filtervalue" onkeyup="applyfilter()" placeholder="Search String" value="">
+            {% if context.session.admin == '1' %}
+                <img src="{{ url_for('static', filename='/icons/badge-ad.svg') }}" alt="Logged in user is an admin.">
+            {% endif %}
         </span>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample01" aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample01"
+                    aria-controls="navbarsExample01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-      <div class="collapse navbar-collapse" id="navbarsExample01">
-        <ul class="navbar-nav me-auto mb-2">
-{#          <li class="nav-item">#}
-{#            <a class="nav-link active" aria-current="page" href="/">Home</a>#}
-{#          </li>#}
-          <li class="nav-item">
-            <a class="nav-link" href="/add">Add</a>
-          </li>
-            <li>
-                <a class="nav-link" href="/maintenance">Import / csvExport</a>
-            </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+            <div class="collapse navbar-collapse" id="navbarsExample01">
+                <ul class="navbar-nav me-auto mb-2">
+                    {% if context.session.username > '' %}
+                        <li>
+                            <a class="nav-link" href="auth/profile-edit/{{ context.session.user_id }}">Edit my profile</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add">Add</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/maintenance">Import / csvExport</a>
+                    </li>
+                    <li>
+                        <a class="nav-link" href="/auth/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 </main>
 <section class="content">
-  {% block content %}{% endblock %}
+    {% block content %}{% endblock %}
 </section>
 <footer class="footer mt-auto py-3 bg-light">
 </footer>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+        crossorigin="anonymous"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/home_filter.js') }}"></script>
 </html>

@@ -11,6 +11,7 @@
         <th>Phone</th>
         <th>Title</th>
         <th>ID</th>
+        <th>Years</th>
         <th>Location</th>
         <th>Action</th>
     </tr>
@@ -25,6 +26,7 @@
                 {{ s["mobile_phone"] }} <img src="{{ url_for('static', filename='/icons/phone.svg')}}" alt="mobile phone"/></td>
             <td>{{ s["title"] }}</td>
             <td>{{ s["empid"] }}</td>
+            <td>{{ s["yofs"] }}</td>
             <td>{{ s["location"] }}</td>
             <td>
                 <a href="/edit/{{ s["empid"] }}">

@@ -9,23 +9,27 @@
             <span class="row">
                 <div class="col-3"><label>Username:</label></div>
                 <div class="col-6">
-                <input type="text" name="username" placeholder="Username"/>
+                <input type="text" name="username" placeholder="Username" value="{{ context.username }}"/>
                 </div>
             </span>
-
         </div>
         <div class="row">
             <span class="row">
                 <div class="col-3"><label>Password:</label></div>
-                <div class="col-6"><input type="password" name="password" placeholder="password"></div>
+                <div class="col-6"><input type="password" name="password" placeholder="password" value="{{ context.pw1 }}"></div>
             </span>
         </div>
         <div class="row">
-            <div class="col-3">&nbsp;</div>
+            <span class="row">
+                <div class="col-3"><label>Password Confirm:</label></div>
+                <div class="col-6"><input type="password" name="password2" placeholder="password" value="{{ context.pw2 }}"></div>
+            </span>
+        </div>
+        <div class="row">
+            <div class="col-3">{{ context.feedback }}&nbsp;</div>
             <div class="col-6">
                 <span>
-                    <button type="submit">Login</button>
-
+                    <button type="submit" name="btn" value="create">Create Account</button>
                 </span>
             </div>
         </div>

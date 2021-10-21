@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <form action="/auth/profile-edit" method="post">
+    <input type="hidden" name="user_id" value="{{ context.data.id }}"
+    <div class="container align-content-center card">
+        <div class="row">
+            <span class="row">
+                <div class="col-3"><label>Username:</label></div>
+                <div class="col-6">
+                <input type="text" name="username" placeholder="Username" value="{{ context.data.username }}"/>
+                </div>
+            </span>
+        </div>
+        <div class="row">
+            <span class="row">
+                <div class="col-3"><label>Email:</label></div>
+                <div class="col-6">
+                <input type="email" name="email" placeholder="email" value="{{ context.data.email }}"/>
+                </div>
+            </span>
+        </div>
+        <div class="row">
+            <div class="col-3">&nbsp;</div>
+            <div class="col-6">
+                <span>
+                    <button type="submit" name="btn" value="update">Update Account</button>
+                    <button type="submit" name="btn" value="pwchange">Change Password</button>
+                </span>
+            </div>
+        </div>
+    </div>
+    </form>
+
+{% endblock %}
+
+
+
