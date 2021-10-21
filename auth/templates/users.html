@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block header %}
+{% endblock %}
+
+{% block content %}
+        <table class="table table-hover table-striped" id="data_table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Admin</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+        <tbody>
+        {% for s in context.data %}
+        <tr id="row{{ s["id"] }}">
+            <th scope="row">{{ s["id"] }}</th>
+            <td>{{ s["username"] }}</td>
+            <td>{{ s["email"] }}</td>
+            <td>
+                {% if s['admin'] == '1' %}
+                Yes
+                {% else %}
+                No
+                {% endif %}
+            <td>
+                <a href="/auth/user-edit/{{ s["id"] }}">
+                    <img src="{{ url_for('static', filename='/icons/pencil-square.svg')}}" alt="edit"/>
+                </a>
+                <a href="/auth/user-delete/{{ s["id"] }}">
+                    <img src="{{ url_for('static', filename='/icons/trash.svg')}}" alt="delete"/>
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

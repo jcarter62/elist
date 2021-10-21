@@ -6,7 +6,7 @@ from flask import current_app
 from sqlite3 import Error
 
 
-class DB:
+class AuthDB:
     # ref: https://www.sqlitetutorial.net/sqlite-python/create-tables/
     _dbpath = None
     _conn = None
@@ -250,3 +250,63 @@ class DB:
             return True
         else:
             return False
+
+    def username_exists(self, username='') -> bool:
+        result = False
+        try:
+            cmd = 'select count(*) as num from ' + self._table_name + ' ' +\
+                'where username = "' + username +'" ; '
+            c = self._conn.cursor()
+            c = c.execute(cmd)
+            rows = c.fetchall()
+            for row in rows:
+                if row[0] > 0:
+                    result = True
+        except Error as e:
+            print(e)
+        return result
+
+    def email_exists(self, email='') -> bool:
+        result = False
+        try:
+            cmd = 'select count(*) as num from ' + self._table_name + ' ' +\
+                'where email = "' + email +'" ; '
+            c = self._conn.cursor()
+            c = c.execute(cmd)
+            rows = c.fetchall()
+            for row in rows:
+                if row[0] > 0:
+                    result = True
+        except Error as e:
+            print(e)
+        return result
+
+    def load_users(self, user_id=None) -> []:
+        data = []
+        try:
+            if user_id is None:
+                cmd = 'select id, username, email, admin from ' + self._table_name +' ' +\
+                    'order by username;'
+            else:
+                cmd = 'select id, username, email, admin from ' + self._table_name +' ' +\
+                    'where id = ' + user_id + ' ' +\
+                    'order by username;'
+
+            c = self._conn.cursor()
+            c = c.execute(cmd)
+            rows = c.fetchall()
+
+            for row in rows:
+                user = {
+                    "id": row[0],
+                    "username": row[1],
+                    "email": row[2],
+                    "admin": row[3]
+                }
+                data.append(user)
+
+        except Error as e:
+            print(e)
+        return data
+
+

@@ -3,8 +3,8 @@
 {% endblock %}
 
 {% block content %}
-    <form action="/auth/profile-edit" method="post">
-    <input type="hidden" name="user_id" value="{{ context.data.id }}"
+    <form action="{{ context.action }}" method="post">
+    <input type="hidden" name="user_id" value="{{ context.data.id }}" />
     <div class="container align-content-center card">
         <div class="row">
             <span class="row">
@@ -27,13 +27,14 @@
             <div class="col-6">
                 <span>
                     <button type="submit" name="btn" value="update">Update Account</button>
-                    <button type="submit" name="btn" value="pwchange">Change Password</button>
+                    {% if context.title == 'Edit Profile' %}
+                        <button type="submit" name="btn" value="pwchange">Change Password</button>
+                    {% endif %}
                 </span>
             </div>
         </div>
     </div>
     </form>
-
 {% endblock %}
 
 

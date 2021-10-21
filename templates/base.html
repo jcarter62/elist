@@ -30,8 +30,11 @@
                 <ul class="navbar-nav me-auto mb-2">
                     {% if context.session.username > '' %}
                         <li>
-                            <a class="nav-link" href="auth/profile-edit/{{ context.session.user_id }}">Edit my profile</a>
+                            <a class="nav-link" href="auth/profile-edit/{{ context.session.user_id }}">Manage My Profile</a>
                         </li>
+                    {% endif %}
+                    {% if context.session.admin == '1' %}
+                        <a class="nav-link" href="auth/users">Manage Users</a>
                     {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="/add">Add</a>
