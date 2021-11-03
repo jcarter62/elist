@@ -4,7 +4,7 @@
 
 {% block content %}
     <form action="/save" method="POST">
-    <input type="hidden" name="id" value="{{ context.employee['id'] }}"/>
+    <input type="hidden" name="empid" value="{{ context.employee['empid'] }}"/>
     <table class="table table-hover table-striped" id="system_table">
         <thead>
         <tr>
@@ -54,7 +54,7 @@
                     </tr>
                     <tr>
                         <td>Start Date</td>
-                        <td><input type="date" name="i_start_date" value="{{ context.employee['start_date'] }}"/></td>
+                        <td><input type="date" name="i_start_date" value="{{ context.employee['start_date_str'] }}"/></td>
                     </tr>
                     <tr>
                         <td>End Date</td>

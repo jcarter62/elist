@@ -45,24 +45,26 @@
                     <tr>
                         <td>End: {{ context.employee['end_date'] }}</td>
                     </tr>
-
-
+                    <tr>
+                        <td>
+                            <a href="/edit/{{ context.employee['empid'] }}">
+                                <img src="{{ url_for('static', filename='/icons/pencil-square.svg') }}" alt="edit"/>
+                            </a>
+                            <a href="/upload/{{ context.employee['empid'] }}">
+                                <img src="{{ url_for('static', filename='/icons/cloud-arrow-up.svg') }}"
+                                     alt="upload image"/>
+                            </a>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </td>
             <td>
                 <img class="w-100" src="{{ context.imageurl }}"/>
             </td>
-
         </tr>
         </tbody>
     </table>
-    <a href="/edit/{{ context.employee['empid'] }}">
-        <img src="{{ url_for('static', filename='/icons/pencil-square.svg') }}" alt="edit"/>
-    </a>
-    <a href="/upload/{{ context.employee['empid'] }}">
-        <img src="{{ url_for('static', filename='/icons/cloud-arrow-up.svg') }}" alt="upload image"/>
-    </a>
 
 {% endblock %}
 

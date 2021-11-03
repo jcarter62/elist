@@ -47,9 +47,11 @@ window.onload = (event) => {
     // ref: https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event
     let search_string = get_search_string();
     let e = document.getElementById('filtervalue');
-    e.value = search_string;
-    if (search_string.length > 0) {
-        applyfilter();
+    if ((e != null) && (search_string != null)) {
+        e.value = search_string;
+        if (search_string.length > 0) {
+            applyfilter();
+        }
     }
     return;
 }

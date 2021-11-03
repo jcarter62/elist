@@ -1,16 +1,29 @@
 from functools import wraps
 from flask import Flask, render_template, redirect, request, url_for, send_file, session, current_app, Blueprint
 from flask_bootstrap import Bootstrap
-from db import DB
+from db import DB, MDB
 from emp_picture import EmployeePicture
 import os
 import hashlib
 import auth
 from session_info import Session_Info
+from flask_sqlalchemy import SQLAlchemy
+from flask_session import Session
+import pymongo
 
 app = Flask(__name__)
 app.config.from_object('config')
-app.secret_key = app.config['SECRET_KEY']
+
+# app.secret_key = app.config['SECRET_KEY']
+# app.config['SQLALCHEMY_DATABASE_URI'] = app.config['SESSION_DB']
+
+
+msessiondb = pymongo.MongoClient('localhost', 27017)
+app.config['SESSION_MONGODB'] = msessiondb
+app.config['SESSION_PERMANENT'] = True
+sess = Session(app)
+
+# _sessionDB.create_all()
 
 app.register_blueprint(auth.auth_routes, url_prefix='/auth')
 
@@ -68,7 +81,7 @@ def load_config():
 @app.route('/')
 @login_required
 def route_home():
-    db = DB()
+    db = MDB()
     employees = db.load_employees()
 
     context = {
@@ -81,9 +94,9 @@ def route_home():
 
 @app.route('/employee/<empid>')
 def route_employee(empid):
-    db = DB()
+    db = MDB()
     employee = db.load_employee(empid)
-    imageurl = '/image/' + employee['empid']
+    imageurl = '/image/' + str(employee['empid'])
 
     # imageurl = url_for('static', filename='pictures' + str(employee['empid']) + '.jpg' )
 
@@ -107,7 +120,7 @@ def route_image_id_name(id):
 
 @app.route('/edit/<empid>')
 def route_edit_id(empid):
-    db = DB()
+    db = MDB()
     employee = db.load_employee(empid)
     context = {
         'employee': employee,
@@ -119,9 +132,9 @@ def route_edit_id(empid):
 
 @app.route('/save', methods=['POST'])
 def route_save_post():
-    id = request.form['id']
-    db = DB()
-    emp = db.load_employee(id)
+    empid = request.form['empid']
+    db = MDB()
+    emp = db.load_employee(empid)
     emp['first_name'] = request.form['i_first_name']
     emp['last_name'] = request.form['i_last_name']
     emp['desk_phone'] = request.form['i_desk_phone']
@@ -132,15 +145,15 @@ def route_save_post():
     emp['location'] = request.form['i_location']
     emp['start_date'] = request.form['i_start_date']
     emp['end_date'] = request.form['i_end_date']
-    db.update_employee(emp)
+    db.update_employee_by_obj(emp)
 
-    url = '/employee/' + str(id)
+    url = '/employee/' + str(empid)
     return redirect(url)
 
 
 @app.route('/add')
 def route_add():
-    db = DB()
+    db = MDB()
     id = db.create_new_employee()
     url = '/edit/' + str(id)
     return redirect(url)
@@ -148,14 +161,8 @@ def route_add():
 
 @app.route('/upload/<id>')
 def route_upload_id(id):
-    db = DB()
-    employees = db.load_employees()
-    employee = None
-    recordid = 0
-    for e in employees:
-        if e['empid'] == id:
-            recordid = e['id']
-            employee = e
+    db = MDB()
+    employee = db.load_employee(id)
 
     context = {
         'employee': employee,
@@ -218,7 +225,7 @@ def route_import_employees_post():
 
     imp = csvImport()
     data = imp.parseCSV(file_path)
-    db = DB()
+    db = MDB()
     db.load_from_array(data)
 
     return redirect('/')
@@ -227,14 +234,14 @@ def route_import_employees_post():
 @app.route('/delete', methods=['POST'])
 def route_delete_empid_post():
     empid = request.form['empid']
-    db = DB()
+    db = MDB()
     db.delete_employee(empid)
     return redirect('/')
 
 
 @app.route('/delete/<empid>')
 def route_delete_empid_get(empid):
-    db = DB()
+    db = MDB()
     employee = db.load_employee(empid)
     if employee is None:
         return redirect('/')

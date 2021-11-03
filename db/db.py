@@ -2,6 +2,7 @@ import sqlite3
 from flask import current_app
 from sqlite3 import Error
 import arrow
+import pymongo
 
 
 class DB:

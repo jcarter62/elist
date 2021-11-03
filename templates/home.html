@@ -18,12 +18,14 @@
     </thead>
         <tbody>
         {% for s in context.employees %}
-        <tr id="row{{ s["id"] }}">
+        <tr id="row{{ s["empid"] }}">
             <th scope="row"><a href="/employee/{{ s['empid'] }}">{{ s["name"] }}</a></th>
 {#            https://codepen.io/cristinaconacel/pen/OBKBPK#}
             <td class="w-10"><img src="/image/{{ s['empid'] }}" class="img-fluid img-thumbnail"></td>
-            <td>{{ s["desk_phone"] }} <img src="{{ url_for('static', filename='/icons/telephone.svg')}}" alt="desk phone"/><br>
-                {{ s["mobile_phone"] }} <img src="{{ url_for('static', filename='/icons/phone.svg')}}" alt="mobile phone"/></td>
+            <td>
+                {{ s["desk_phone"] }} <img src="{{ url_for('static', filename='/icons/telephone.svg')}}" alt="desk phone"/><br>
+                {{ s["mobile_phone"] }} <img src="{{ url_for('static', filename='/icons/phone.svg')}}" alt="mobile phone"/>
+            </td>
             <td>{{ s["title"] }}</td>
             <td>{{ s["empid"] }}</td>
             <td>{{ s["yofs"] }}</td>

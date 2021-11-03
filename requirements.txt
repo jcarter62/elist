@@ -1,5 +1,8 @@
 Flask>=2.0.2
 Flask-Bootstrap4
+flask-session
+flask-sqlalchemy
 pandas
 arrow
 password-validator
+pymongo
